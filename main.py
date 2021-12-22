@@ -150,10 +150,10 @@ if __name__ == '__main__':
     plt.show()
 
     net = resnet50(class_num=4)
-    num_epochs = 200
+    num_epochs = 100
 
     # 加载预训练模型
-    param_dict = load_checkpoint('resnet50.ckpt')
+    param_dict = load_checkpoint('Helios.ckpt')
 
     # 获取全连接层的名字
     filter_list = [x.name for x in net.end_point.get_parameters()]
