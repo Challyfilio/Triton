@@ -176,7 +176,7 @@ if __name__ == '__main__':
                 callbacks=[eval_cb, TimeMonitor()],
                 dataset_sink_mode=True)
 
-    print(epoch_per_eval)
+    # print(epoch_per_eval)
     curve_draw(epoch_per_eval)
 
     visualize_model('best.ckpt', val_ds)
