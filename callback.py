@@ -61,6 +61,6 @@ class EvalCallBack(Callback):
 
     # 训练结束后，打印最好的精度和对应的epoch
     def end(self, run_context):
-        print("End training, the best {0} is: {1}, the best {0} epoch is {2}".format(self.metrics_name,
+        print("\nEnd training, the best {0} is: {1}, the best {0} epoch is {2}".format(self.metrics_name,
                                                                                      self.best_res,
                                                                                      self.best_epoch), flush=True)
