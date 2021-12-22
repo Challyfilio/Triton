@@ -34,7 +34,7 @@ def create_dataset(data_path, batch_size=24, repeat_num=1, training=True):
         ]
     else:
         trans = [
-            CV.Decode(),
+            # CV.Decode(),
             CV.Resize(256),
             CV.CenterCrop(image_size),
             CV.Normalize(mean=mean, std=std),
@@ -150,10 +150,10 @@ if __name__ == '__main__':
     plt.show()
 
     net = resnet50(class_num=4)
-    num_epochs = 100
+    num_epochs = 2
 
     # 加载预训练模型
-    param_dict = load_checkpoint('Helios.ckpt')
+    param_dict = load_checkpoint('resnet50.ckpt')
 
     # 获取全连接层的名字
     filter_list = [x.name for x in net.end_point.get_parameters()]
