@@ -1,7 +1,6 @@
 import os
 import stat
 
-from matplotlib import pyplot as plt
 from mindspore.train.callback import Callback
 from mindspore import save_checkpoint
 
@@ -42,8 +41,6 @@ class EvalCallBack(Callback):
         cur_epoch = cb_params.cur_epoch_num
         loss_epoch = cb_params.net_outputs
 
-        # train_r为一个二元组，分别记录训练集中分类正确的数量和该集合中总的样本数
-        # train_r = (sum([tup[0] for tup in train_rights]), sum([tup[1] for tup in train_rights]))
         if cur_epoch >= self.eval_start_epoch and (cur_epoch - self.eval_start_epoch) % self.interval == 0:
             res = self.eval_function(self.eval_param_dict)
             # print('Epoch:{}/{}'.format(cur_epoch, num_epochs))
