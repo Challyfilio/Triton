@@ -88,6 +88,15 @@ def visualize_model(best_ckpt_path, val_ds):
     plt.show()
 
 
+def curve_draw(epoch_per_eval):
+    plt.xlabel('Epoch')
+    plt.plot(epoch_per_eval['Epoch'], epoch_per_eval['loss'], 'red', labels='loss')
+    plt.plot(epoch_per_eval['Epoch'], epoch_per_eval['acc'], 'blue', labels='acc')
+    
+    # plt.savefig('./acc.png')
+    plt.show()
+
+
 def filter_checkpoint_parameter_by_list(origin_dict, param_filter):
     for key in list(origin_dict.keys()):
         for name in param_filter:
@@ -159,8 +168,8 @@ if __name__ == '__main__':
     # print(train_ds)
     val_ds = create_dataset(val_data_path)
     eval_param_dict = {"model": model, "dataset": val_ds, "metrics_name": "Accuracy"}
-    epoch_per_eval = {"epoch": [], "loss": [], "acc": []}  # 方便最后打印精度曲线
-    eval_cb = EvalCallBack(apply_eval, eval_param_dict, epoch_per_eval,)
+    epoch_per_eval = {"epoch": [], "loss": [], "acc": []}
+    eval_cb = EvalCallBack(apply_eval, eval_param_dict, epoch_per_eval, )
 
     # 训练模型
     model.train(num_epochs,
