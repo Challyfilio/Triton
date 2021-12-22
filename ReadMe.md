@@ -11,6 +11,7 @@ https://download.mindspore.cn/model_zoo/official/cv/resnet/resnet50_v1.5_ascend_
 ```
 ./
 └─resnet50.ckpt
+└─modelz
 └─data
    └─Tumor
       └─Training
