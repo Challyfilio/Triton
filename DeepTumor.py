@@ -1,7 +1,7 @@
 """
 author: Xie RL
 """
-
+from modelz.src.resnet import resnet50
 from mindspore import nn, Model, context
 import mindspore.dataset as ds
 import mindspore.dataset.vision.c_transforms as c_trans
