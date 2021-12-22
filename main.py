@@ -75,12 +75,6 @@ def visualize_model(best_ckpt_path, val_ds):
     pred = np.argmax(output.asnumpy(), axis=1)
 
     # 可视化模型预测
-    mean = np.array([0.485, 0.456, 0.406])
-    std = np.array([0.229, 0.224, 0.225])
-    # mean = [0.485 * 255, 0.456 * 255, 0.406 * 255]
-    # std = [0.229 * 255, 0.224 * 255, 0.225 * 255]
-    images = std * images + mean
-    images = np.clip(images, 0, 1)
     plt.figure(figsize=(12, 5))
     for i in range(len(labels)):
         plt.subplot(3, 8, i + 1)
