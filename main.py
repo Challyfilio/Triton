@@ -43,8 +43,8 @@ def create_dataset(data_path, batch_size=24, repeat_num=1, training=True):
     type_cast_op = C.TypeCast(mstype.float32)  #######
 
     # 实现数据的map映射、批量处理和数据重复的操作
-    data_set = data_set.map(operations=trans, input_columns="image", num_parallel_workers=8)
-    data_set = data_set.map(operations=type_cast_op, input_columns="image", num_parallel_workers=8)
+    data_set = data_set.map(operations=trans, input_columns='image', num_parallel_workers=8)
+    data_set = data_set.map(operations=type_cast_op, input_columns='image', num_parallel_workers=8)
     data_set = data_set.batch(batch_size, drop_remainder=True)
     data_set = data_set.repeat(repeat_num)
 
@@ -62,7 +62,7 @@ def apply_eval(eval_param):
 
 # 定义网络并加载参数，对验证集进行预测
 def visualize_model(best_ckpt_path, val_ds):
-    net = resnet50(4)
+    net = resnet50(class_num=4)
     param_dict = load_checkpoint(best_ckpt_path)
     load_param_into_net(net, param_dict)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')
@@ -134,7 +134,7 @@ if __name__ == '__main__':
     plt.show()
 
     net = resnet50(class_num=4)
-    num_epochs = 20
+    num_epochs = 2
 
     # 加载预训练模型
     param_dict = load_checkpoint('resnet50.ckpt')
@@ -159,12 +159,17 @@ if __name__ == '__main__':
     # print(train_ds)
     val_ds = create_dataset(val_data_path)
     eval_param_dict = {"model": model, "dataset": val_ds, "metrics_name": "Accuracy"}
-    eval_cb = EvalCallBack(apply_eval, eval_param_dict, )
+    epoch_per_eval = {"epoch": [], "loss": [], "acc": []}  # 方便最后打印精度曲线
+    eval_cb = EvalCallBack(apply_eval, eval_param_dict, epoch_per_eval,)
 
     # 训练模型
     model.train(num_epochs,
                 train_ds,
                 callbacks=[eval_cb, TimeMonitor()],
                 dataset_sink_mode=True)
+
+    print(epoch_per_eval)
+    print('finish')
+    exit(0)
 
     visualize_model('best.ckpt', val_ds)
