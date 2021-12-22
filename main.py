@@ -88,13 +88,13 @@ def visualize_model(best_ckpt_path, val_ds):
     plt.show()
 
 
-def curve_draw(epoch_per_eval):
+def curve_draw(record):
     plt.xlabel('Epoch')
-    plt.plot(epoch_per_eval['Epoch'], epoch_per_eval['loss'], 'red', labels='loss')
-    plt.plot(epoch_per_eval['Epoch'], epoch_per_eval['acc'], 'blue', labels='acc')
-    
-    # plt.savefig('./acc.png')
+    plt.plot(record['Epoch'], record['loss'], 'red', labels='loss')
+    plt.plot(record['Epoch'], record['acc'], 'blue', labels='acc')
+    plt.legend()
     plt.show()
+    # plt.savefig('./acc.png')
 
 
 def filter_checkpoint_parameter_by_list(origin_dict, param_filter):
@@ -178,7 +178,6 @@ if __name__ == '__main__':
                 dataset_sink_mode=True)
 
     print(epoch_per_eval)
-    print('finish')
-    exit(0)
+    curve_draw(epoch_per_eval)
 
     visualize_model('best.ckpt', val_ds)
