@@ -1,4 +1,3 @@
-import copy
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -10,7 +9,7 @@ from mindspore import dtype as mstype
 from mindspore.train.callback import TimeMonitor
 from mindspore import Model, Tensor, context, load_checkpoint, load_param_into_net
 
-from modelz.src.resnet import resnet50
+from modelz.src.resnet import resnet50,resnet18
 from callback import EvalCallBack
 
 
@@ -90,8 +89,8 @@ def visualize_model(best_ckpt_path, val_ds):
 
 def curve_draw(record):
     plt.xlabel('Epoch')
-    plt.plot(record['Epoch'], record['loss'], 'red', labels='loss')
-    plt.plot(record['Epoch'], record['acc'], 'blue', labels='acc')
+    # plt.plot(record['epoch'], record['loss'], 'red', labels='loss')
+    plt.plot(record['epoch'], record['acc'], label='acc')
     plt.legend()
     plt.show()
     # plt.savefig('./acc.png')
@@ -120,7 +119,7 @@ if __name__ == '__main__':
     labels = data["label"]
     labels = Tensor(labels, mstype.int32)
     print("Tensor of image", images.shape)
-    print(images.dtype)  # uint8
+    print(images.dtype)
     print("Labels:", labels)
     print(labels.dtype)
 
@@ -143,7 +142,7 @@ if __name__ == '__main__':
     plt.show()
 
     net = resnet50(class_num=4)
-    num_epochs = 2
+    num_epochs = 100
 
     # 加载预训练模型
     param_dict = load_checkpoint('resnet50.ckpt')
