@@ -9,7 +9,7 @@ from mindspore import dtype as mstype
 from mindspore.train.callback import TimeMonitor
 from mindspore import Model, Tensor, context, load_checkpoint, load_param_into_net
 
-from modelz.src.resnet import resnet50,resnet18
+from modelz.src.resnet import resnet50, resnet18, resnet152
 from callback import EvalCallBack
 
 
@@ -24,7 +24,7 @@ def create_dataset(data_path, batch_size=24, repeat_num=1, training=True):
     if training:
         trans = [
             CV.RandomCropDecodeResize(image_size, scale=(0.08, 1.0), ratio=(0.75, 1.333)),
-            CV.RandomHorizontalFlip(prob=0.5),
+            # CV.RandomHorizontalFlip(prob=0.5),
             CV.Normalize(mean=mean, std=std),
             CV.HWC2CHW()
             # CV.Decode(),
@@ -37,6 +37,7 @@ def create_dataset(data_path, batch_size=24, repeat_num=1, training=True):
             CV.Decode(),
             CV.Resize(256),
             CV.CenterCrop(image_size),
+            CV.Normalize(mean=mean, std=std),
             CV.HWC2CHW()
         ]
     type_cast_op = C.TypeCast(mstype.float32)  #######
@@ -61,7 +62,7 @@ def apply_eval(eval_param):
 
 # 定义网络并加载参数，对验证集进行预测
 def visualize_model(best_ckpt_path, val_ds):
-    net = resnet50(class_num=4)
+    net = resnet18(class_num=4)
     param_dict = load_checkpoint(best_ckpt_path)
     load_param_into_net(net, param_dict)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')
@@ -74,12 +75,22 @@ def visualize_model(best_ckpt_path, val_ds):
     pred = np.argmax(output.asnumpy(), axis=1)
 
     # 可视化模型预测
+    mean = np.array([0.485, 0.456, 0.406])
+    std = np.array([0.229, 0.224, 0.225])
+    # mean = [0.485 * 255, 0.456 * 255, 0.406 * 255]
+    # std = [0.229 * 255, 0.224 * 255, 0.225 * 255]
+    images = std * images + mean
+    images = np.clip(images, 0, 1)
     plt.figure(figsize=(12, 5))
     for i in range(len(labels)):
         plt.subplot(3, 8, i + 1)
         color = 'blue' if pred[i] == labels[i] else 'red'
         plt.title(class_name[pred[i]], color=color)
         picture_show = np.transpose(images[i], (1, 2, 0))
+        mean = np.array([0.485, 0.456, 0.406])
+        std = np.array([0.229, 0.224, 0.225])
+        picture_show = std * picture_show + mean
+
         picture_show = picture_show / np.amax(picture_show)
         picture_show = np.clip(picture_show, 0, 1)
         plt.imshow(picture_show)
@@ -123,7 +134,6 @@ if __name__ == '__main__':
     print("Labels:", labels)
     print(labels.dtype)
 
-    # class_name = {0: "dogs", 1: "wolves"}
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
     count = 1
 
@@ -132,6 +142,10 @@ if __name__ == '__main__':
     for i in images:
         plt.subplot(3, 8, count)
         picture_show = np.transpose(i.asnumpy(), (1, 2, 0))
+        mean = np.array([0.485, 0.456, 0.406])
+        std = np.array([0.229, 0.224, 0.225])
+        picture_show = std * picture_show + mean
+
         picture_show = picture_show / np.amax(picture_show)
         picture_show = np.clip(picture_show, 0, 1)
         plt.imshow(picture_show)
@@ -141,20 +155,20 @@ if __name__ == '__main__':
         plt.axis("off")
     plt.show()
 
-    net = resnet50(class_num=4)
-    num_epochs = 100
+    net = resnet18(class_num=4)
+    num_epochs = 3
 
-    # 加载预训练模型
-    param_dict = load_checkpoint('resnet50.ckpt')
-
-    # 获取全连接层的名字
-    filter_list = [x.name for x in net.end_point.get_parameters()]
-
-    # 删除预训练模型的全连接层
-    filter_checkpoint_parameter_by_list(param_dict, filter_list)
-
-    # 给网络加载参数
-    load_param_into_net(net, param_dict)
+    # # 加载预训练模型
+    # param_dict = load_checkpoint('resnet50.ckpt')
+    #
+    # # 获取全连接层的名字
+    # filter_list = [x.name for x in net.end_point.get_parameters()]
+    #
+    # # 删除预训练模型的全连接层
+    # filter_checkpoint_parameter_by_list(param_dict, filter_list)
+    #
+    # # 给网络加载参数
+    # load_param_into_net(net, param_dict)
 
     # 定义优化器和损失函数
     opt = nn.Momentum(params=net.trainable_params(), learning_rate=0.001, momentum=0.9)
