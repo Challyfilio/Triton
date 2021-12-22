@@ -62,7 +62,7 @@ def apply_eval(eval_param):
 
 # 定义网络并加载参数，对验证集进行预测
 def visualize_model(best_ckpt_path, val_ds):
-    net = resnet18(class_num=4)
+    net = resnet50(class_num=4)
     param_dict = load_checkpoint(best_ckpt_path)
     load_param_into_net(net, param_dict)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')
@@ -149,20 +149,20 @@ if __name__ == '__main__':
         plt.axis("off")
     plt.show()
 
-    net = resnet18(class_num=4)
-    num_epochs = 3
+    net = resnet50(class_num=4)
+    num_epochs = 200
 
-    # # 加载预训练模型
-    # param_dict = load_checkpoint('resnet50.ckpt')
-    #
-    # # 获取全连接层的名字
-    # filter_list = [x.name for x in net.end_point.get_parameters()]
-    #
-    # # 删除预训练模型的全连接层
-    # filter_checkpoint_parameter_by_list(param_dict, filter_list)
-    #
-    # # 给网络加载参数
-    # load_param_into_net(net, param_dict)
+    # 加载预训练模型
+    param_dict = load_checkpoint('resnet50.ckpt')
+
+    # 获取全连接层的名字
+    filter_list = [x.name for x in net.end_point.get_parameters()]
+
+    # 删除预训练模型的全连接层
+    filter_checkpoint_parameter_by_list(param_dict, filter_list)
+
+    # 给网络加载参数
+    load_param_into_net(net, param_dict)
 
     # 定义优化器和损失函数
     opt = nn.Momentum(params=net.trainable_params(), learning_rate=0.001, momentum=0.9)
