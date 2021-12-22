@@ -24,7 +24,7 @@ def create_dataset(data_path, batch_size=24, repeat_num=1, training=True):
     if training:
         trans = [
             CV.RandomCropDecodeResize(image_size, scale=(0.08, 1.0), ratio=(0.75, 1.333)),
-            # CV.RandomHorizontalFlip(prob=0.5),
+            CV.RandomHorizontalFlip(prob=0.5),
             CV.Normalize(mean=mean, std=std),
             CV.HWC2CHW()
             # CV.Decode(),
