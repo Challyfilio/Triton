@@ -94,7 +94,9 @@ def visualize_model(best_ckpt_path, val_ds):
 
 def curve_draw(record):
     plt.xlabel('Epoch')
-    # plt.plot(record['epoch'], record['loss'], 'red', labels='loss')
+    loss_value = record['loss']
+    loss_value = list(map(float, loss_value))
+    plt.plot(record['epoch'], loss_value, 'red', label='loss')
     plt.plot(record['epoch'], record['acc'], label='acc')
     plt.legend()
     plt.show()
@@ -150,10 +152,10 @@ if __name__ == '__main__':
     plt.show()
 
     net = resnet50(class_num=4)
-    num_epochs = 2
+    num_epochs = 200
 
     # 加载预训练模型
-    param_dict = load_checkpoint('resnet50.ckpt')
+    param_dict = load_checkpoint('Helios.ckpt')
 
     # 获取全连接层的名字
     filter_list = [x.name for x in net.end_point.get_parameters()]
