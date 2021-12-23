@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -103,6 +104,13 @@ def curve_draw(record):
     # plt.savefig('./acc.png')
 
 
+def test_net(network, model, ds_eval):
+    """定义验证的方法"""
+    # acc = model.eval(ds_eval, dataset_sink_mode=False)
+    acc = model.eval(ds_eval)
+    print("\n{}".format(acc))
+
+
 def filter_checkpoint_parameter_by_list(origin_dict, param_filter):
     for key in list(origin_dict.keys()):
         for name in param_filter:
@@ -152,19 +160,19 @@ if __name__ == '__main__':
     plt.show()
 
     net = resnet50(class_num=4)
-    num_epochs = 200
+    num_epochs = 2
 
-    # # 加载预训练模型
-    # param_dict = load_checkpoint('Helios.ckpt')
-    #
-    # # 获取全连接层的名字
-    # filter_list = [x.name for x in net.end_point.get_parameters()]
-    #
-    # # 删除预训练模型的全连接层
-    # filter_checkpoint_parameter_by_list(param_dict, filter_list)
-    #
-    # # 给网络加载参数
-    # load_param_into_net(net, param_dict)
+    # 加载预训练模型
+    param_dict = load_checkpoint('Helios.ckpt')
+
+    # 获取全连接层的名字
+    filter_list = [x.name for x in net.end_point.get_parameters()]
+
+    # 删除预训练模型的全连接层
+    filter_checkpoint_parameter_by_list(param_dict, filter_list)
+
+    # 给网络加载参数
+    load_param_into_net(net, param_dict)
 
     # 定义优化器和损失函数
     opt = nn.Momentum(params=net.trainable_params(), learning_rate=0.001, momentum=0.9)
@@ -185,6 +193,8 @@ if __name__ == '__main__':
                 train_ds,
                 callbacks=[eval_cb, TimeMonitor()],
                 dataset_sink_mode=True)
+
+    test_net(net, model, val_ds)
 
     # print(epoch_per_eval)
     curve_draw(epoch_per_eval)
