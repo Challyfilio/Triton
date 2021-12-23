@@ -36,15 +36,15 @@ def eval_show(epoch_per_eval):
     plt.ylabel("Model accuracy")
     plt.title("Model accuracy variation chart")
     plt.plot(epoch_per_eval["epoch"], epoch_per_eval["acc"], "red")
-    plt.savefig('./acc.png')
-    # plt.show()
+    # plt.savefig('./acc.png')
+    plt.show()
 
 
 def main():
-    train_path = './data/Training'
-    test_path = './data/Testing'
+    train_path = './data/Tumor/Training'
+    test_path = './data/Tumor/Testing'
     ckpt_path = './CheckPoint'
-    summary_path = '/root/summary/DeepTumor'
+    # summary_path = '/root/summary/DeepTumor'
 
     label_list = {
         'no_tumor': 0,
@@ -61,6 +61,7 @@ def main():
 
     dataset1 = ds.ImageFolderDataset(dataset_dir=train_path, class_indexing=label_list, shuffle=True)
     eval1 = ds.ImageFolderDataset(dataset_dir=test_path, class_indexing=label_list, shuffle=True)
+
 
     # 缩放至224*224，并转换为CHW（符合resNet50）
     transforms_list = [c_trans.Decode(),
@@ -103,9 +104,9 @@ def main():
     epoch_per_eval = {"epoch": [], "acc": []}  # 方便最后打印精度曲线
     eval_cb = EvalCallBack(model, eval3, eval_per_epoch, epoch_per_eval)
 
-    summary_collector = SummaryCollector(summary_dir=summary_path, collect_freq=1)
+    # summary_collector = SummaryCollector(summary_dir=summary_path, collect_freq=1)
 
-    model.train(epoch_size, dataset3, callbacks=[ckpoint_cb, loss_cb, Time_cb, summary_collector, eval_cb],
+    model.train(epoch_size, dataset3, callbacks=[ckpoint_cb, loss_cb, Time_cb, eval_cb],
                 dataset_sink_mode=False)
 
     # 绘制精度曲线
