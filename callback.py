@@ -13,9 +13,9 @@ class EvalCallBack(Callback):
     def __init__(self, eval_function, eval_param_dict, epoch_per_eval, interval=1, eval_start_epoch=1,
                  save_best_ckpt=True, ckpt_directory="./", besk_ckpt_name="best.ckpt", metrics_name="acc"):
         super(EvalCallBack, self).__init__()
+        self.eval_function = eval_function
         self.eval_param_dict = eval_param_dict
         self.epoch_per_eval = epoch_per_eval
-        self.eval_function = eval_function
         self.eval_start_epoch = eval_start_epoch
 
         if interval < 1:
@@ -49,7 +49,7 @@ class EvalCallBack(Callback):
             print('train Loss: {}'.format(loss_epoch))
             print('val Acc: {}'.format(res))
             self.epoch_per_eval["epoch"].append(cur_epoch)
-            self.epoch_per_eval["loss"].append(loss_epoch)
+            self.epoch_per_eval["loss"].append(str(loss_epoch))
             self.epoch_per_eval["acc"].append(res)
             if res >= self.best_res:
                 self.best_res = res
@@ -62,5 +62,5 @@ class EvalCallBack(Callback):
     # 训练结束后，打印最好的精度和对应的epoch
     def end(self, run_context):
         print("\nEnd training, the best {0} is: {1}, the best {0} epoch is {2}".format(self.metrics_name,
-                                                                                     self.best_res,
-                                                                                     self.best_epoch), flush=True)
+                                                                                       self.best_res,
+                                                                                       self.best_epoch), flush=True)
