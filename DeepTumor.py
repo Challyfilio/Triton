@@ -57,7 +57,7 @@ def main():
     Training_size = 3265  # 训练集大小
     batch_size = 32  # 每批次大小
     eval_per_epoch = 2  # 检查精度的轮次间隔
-    epoch_size = 200  # 伦次数量
+    epoch_size = 4  # 伦次数量
 
     dataset1 = ds.ImageFolderDataset(dataset_dir=train_path, class_indexing=label_list, shuffle=True)
     eval1 = ds.ImageFolderDataset(dataset_dir=test_path, class_indexing=label_list, shuffle=True)
@@ -107,7 +107,7 @@ def main():
     # summary_collector = SummaryCollector(summary_dir=summary_path, collect_freq=1)
 
     model.train(epoch_size, dataset3, callbacks=[ckpoint_cb, loss_cb, Time_cb, eval_cb],
-                dataset_sink_mode=False)
+                dataset_sink_mode=True)
 
     # 绘制精度曲线
     eval_show(epoch_per_eval)
