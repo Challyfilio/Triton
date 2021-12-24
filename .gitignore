@@ -115,4 +115,4 @@ dmypy.json
 
 /resnet50.ckpt
 /data
-.idea/
+/.idea
