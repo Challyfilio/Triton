@@ -133,11 +133,11 @@ def visualize_model(best_ckpt_path, class_name, val_ds):
     labels = data["label"].asnumpy()
     output = model.predict(Tensor(data['image']))
     pred = np.argmax(output.asnumpy(), axis=1)
-    '''
-    pred和labels 计算准确率
+
+    # pred和labels 计算准确率
     print('\nAccuracy is: '+str(accuracy_score(pred,labels))+'\n')
     print(classification_report(pred,labels))
-    '''
+
     # 可视化模型预测
     plt.figure(figsize=(12, 7))
     for i in range(len(labels)):
@@ -170,7 +170,7 @@ if __name__ == '__main__':
     count = 1
     batch_size = 32
     net = resnet50(class_num=4)
-    num_epochs = 200
+    num_epochs = 100
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
     val_ds = val_ds.batch(batch_size=batch_size, drop_remainder=True)
