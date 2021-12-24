@@ -109,7 +109,6 @@ def curve_draw(record):
 
 def test_net(best_ckpt_path, model, ds):
     """定义验证的方法"""
-    # acc = model.eval(ds_eval, dataset_sink_mode=False)
     net = resnet50(class_num=4)
     param_dict = load_checkpoint(best_ckpt_path)
     load_param_into_net(net, param_dict)
@@ -122,8 +121,6 @@ def visualize_model(best_ckpt_path, model, val_ds):
     net = resnet50(class_num=4)
     param_dict = load_checkpoint(best_ckpt_path)
     load_param_into_net(net, param_dict)
-    acc = model.eval(val_ds)  ########
-    print("\nnew{}".format(acc))
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')
     model = Model(net, loss, metrics={"Accuracy": nn.Accuracy()})
     data = next(val_ds.create_dict_iterator())
@@ -173,7 +170,7 @@ if __name__ == '__main__':
     batch_size = 24  # 每批次大小
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
-    val_ds = val_ds.batch(batch_size=batch_size, drop_remainder=True)
+    val_ds = val_ds.batch(batch_size=394, drop_remainder=True)
     image_show(train_ds, class_name)
     # image_show(val_ds, class_name)
 
@@ -211,9 +208,8 @@ if __name__ == '__main__':
                 callbacks=[eval_cb, TimeMonitor()],
                 dataset_sink_mode=False)
 
-    test_net('best.ckpt', model, val_ds)
-
     # print(epoch_per_eval)
     curve_draw(epoch_per_eval)
 
-    # visualize_model('best.ckpt', model, val_ds)
+    test_net('best.ckpt', model, val_ds)
+    visualize_model('best.ckpt', model, val_ds)
