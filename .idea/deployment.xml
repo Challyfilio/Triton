@@ -5,7 +5,7 @@
       <paths name="root@211.82.97.230:5022 password">
         <serverdata>
           <mappings>
-            <mapping deploy="/workspace/pycharm_project/Triton" local="$PROJECT_DIR$" />
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
