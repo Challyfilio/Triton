@@ -113,7 +113,7 @@ def curve_draw(record):
 
 
 # 验证方法
-def test_net(best_ckpt_path, model, ds):
+def net_test(best_ckpt_path, model, ds):
     net = resnet50(class_num=4)
     param_dict = load_checkpoint(best_ckpt_path)
     load_param_into_net(net, param_dict)
@@ -209,5 +209,5 @@ if __name__ == '__main__':
     # print(epoch_per_eval)
     curve_draw(epoch_per_eval)
 
-    test_net('best.ckpt', model, val_ds)
+    net_test('best.ckpt', model, val_ds)
     visualize_model('best.ckpt', class_name, val_ds)
