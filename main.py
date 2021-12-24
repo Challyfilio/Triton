@@ -11,7 +11,7 @@ from mindspore import Model, Tensor, context, load_checkpoint, load_param_into_n
 
 from modelz.src.resnet import resnet50, resnet18, resnet152
 from callback import EvalCallBack
-from sklearn.metrics import accuracy_score,classification_report
+from sklearn.metrics import accuracy_score, classification_report
 
 
 def create_dataset(data_path, batch_size=24, repeat_num=1, training=True):
@@ -62,10 +62,12 @@ def apply_eval(eval_param):
 
 
 # 定义网络并加载参数，对验证集进行预测
-def visualize_model(best_ckpt_path, val_ds):
+def visualize_model(best_ckpt_path, model, val_ds):
     net = resnet50(class_num=4)
     param_dict = load_checkpoint(best_ckpt_path)
     load_param_into_net(net, param_dict)
+    acc = model.eval(val_ds)  ########
+    print("\nnew{}".format(acc))
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')
     model = Model(net, loss, metrics={"Accuracy": nn.Accuracy()})
     data = next(val_ds.create_dict_iterator())
@@ -74,12 +76,13 @@ def visualize_model(best_ckpt_path, val_ds):
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
     output = model.predict(Tensor(data['image']))
     pred = np.argmax(output.asnumpy(), axis=1)
+
     '''
     to-do
     pred和labels 计算准确率
-    '''
     print('\nAccuracy is: '+str(accuracy_score(pred,labels))+'\n')
     print(classification_report(pred,labels))
+    '''
 
     # 可视化模型预测
     plt.figure(figsize=(12, 5))
@@ -166,7 +169,7 @@ if __name__ == '__main__':
     plt.show()
 
     net = resnet50(class_num=4)
-    num_epochs = 30
+    num_epochs = 2
 
     # 加载预训练模型
     param_dict = load_checkpoint('resnet50.ckpt')
@@ -205,4 +208,4 @@ if __name__ == '__main__':
     # print(epoch_per_eval)
     curve_draw(epoch_per_eval)
 
-    visualize_model('best.ckpt', val_ds)
+    visualize_model('best.ckpt', model, val_ds)
