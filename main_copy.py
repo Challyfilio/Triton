@@ -107,10 +107,13 @@ def curve_draw(record):
     # plt.savefig('./acc.png')
 
 
-def test_net(network, model, ds_eval):
+def test_net(best_ckpt_path, model, ds):
     """定义验证的方法"""
     # acc = model.eval(ds_eval, dataset_sink_mode=False)
-    acc = model.eval(ds_eval)
+    net = resnet50(class_num=4)
+    param_dict = load_checkpoint(best_ckpt_path)
+    load_param_into_net(net, param_dict)
+    acc = model.eval(ds)
     print("\n{}".format(acc))
 
 
@@ -172,7 +175,7 @@ if __name__ == '__main__':
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
     val_ds = val_ds.batch(batch_size=batch_size, drop_remainder=True)
     image_show(train_ds, class_name)
-    image_show(val_ds, class_name)
+    # image_show(val_ds, class_name)
 
     net = resnet50(class_num=4)
     num_epochs = 2
@@ -198,7 +201,6 @@ if __name__ == '__main__':
 
     # train_ds = create_dataset(train_data_path)
     # print(train_ds)
-    val_ds = create_dataset(val_data_path)
     eval_param_dict = {"model": model, "dataset": val_ds, "metrics_name": "Accuracy"}
     epoch_per_eval = {"epoch": [], "loss": [], "acc": []}
     eval_cb = EvalCallBack(apply_eval, eval_param_dict, epoch_per_eval, )
@@ -207,11 +209,11 @@ if __name__ == '__main__':
     model.train(num_epochs,
                 train_ds,
                 callbacks=[eval_cb, TimeMonitor()],
-                dataset_sink_mode=True)
+                dataset_sink_mode=False)
 
-    test_net(net, model, val_ds)
+    test_net('best.ckpt', model, val_ds)
 
     # print(epoch_per_eval)
     curve_draw(epoch_per_eval)
 
-    visualize_model('best.ckpt', model, val_ds)
+    # visualize_model('best.ckpt', model, val_ds)
