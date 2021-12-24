@@ -12,6 +12,7 @@ from mindspore import Model, Tensor, context, load_checkpoint, load_param_into_n
 
 from modelz.src.resnet import resnet50, resnet18, resnet152
 from callback import EvalCallBack
+from sklearn.metrics import accuracy_score,classification_report
 
 
 def create_dataset(data_path, batch_size=24, repeat_num=1, training=True):
@@ -74,6 +75,12 @@ def visualize_model(best_ckpt_path, val_ds):
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
     output = model.predict(Tensor(data['image']))
     pred = np.argmax(output.asnumpy(), axis=1)
+    '''
+    to-do
+    pred和labels 计算准确率
+    '''
+    print('/n'+str(accuracy_score(pred,labels))+'/n')
+    print(classification_report(pred,labels))
 
     # 可视化模型预测
     plt.figure(figsize=(12, 5))
@@ -160,10 +167,10 @@ if __name__ == '__main__':
     plt.show()
 
     net = resnet50(class_num=4)
-    num_epochs = 2
+    num_epochs = 20
 
     # 加载预训练模型
-    param_dict = load_checkpoint('Helios.ckpt')
+    param_dict = load_checkpoint('resnet50.ckpt')
 
     # 获取全连接层的名字
     filter_list = [x.name for x in net.end_point.get_parameters()]
