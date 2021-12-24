@@ -1,4 +1,3 @@
-import os
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -79,7 +78,7 @@ def visualize_model(best_ckpt_path, val_ds):
     to-do
     pred和labels 计算准确率
     '''
-    print('/n'+str(accuracy_score(pred,labels))+'/n')
+    print('\nAccuracy is: '+str(accuracy_score(pred,labels))+'\n')
     print(classification_report(pred,labels))
 
     # 可视化模型预测
@@ -167,7 +166,7 @@ if __name__ == '__main__':
     plt.show()
 
     net = resnet50(class_num=4)
-    num_epochs = 20
+    num_epochs = 30
 
     # 加载预训练模型
     param_dict = load_checkpoint('resnet50.ckpt')
