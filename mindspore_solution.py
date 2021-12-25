@@ -15,7 +15,7 @@ from mindspore import dtype as mstype
 from mindspore.train.callback import TimeMonitor
 from mindspore import Model, Tensor, context, load_checkpoint, load_param_into_net
 
-from modelz.src.resnet import resnet50, resnet18, resnet152
+from modelz.src.resnet import *
 from callback import EvalCallBack
 from sklearn.metrics import accuracy_score, classification_report
 
@@ -179,7 +179,8 @@ if __name__ == '__main__':
     # image_show(val_ds, class_name)
 
     # 加载预训练模型
-    param_dict = load_checkpoint('resnet50.ckpt')
+    pretrained = 'resnet50_imagenet2012.ckpt'
+    param_dict = load_checkpoint(pretrained)
 
     # 获取全连接层的名字
     filter_list = [x.name for x in net.end_point.get_parameters()]
@@ -202,6 +203,8 @@ if __name__ == '__main__':
     eval_cb = EvalCallBack(apply_eval, eval_param_dict, epoch_per_eval, )
 
     # 训练模型
+    print('-' * 20)
+    print(pretrained + '\nepoch = ' + str(num_epochs) + '\nbatch = ' + str(batch_size))
     model.train(num_epochs,
                 train_ds,
                 callbacks=[eval_cb, TimeMonitor()],
