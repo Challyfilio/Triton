@@ -5,6 +5,7 @@ Challyfilio
 """
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 import mindspore.nn as nn
 import mindspore.dataset as ds
@@ -102,11 +103,12 @@ def apply_eval(eval_param):
 
 
 def curve_draw(record):
-    plt.xlabel('Epoch')
+    sns.set_theme(style="whitegrid")
     loss_value = record['loss']
     loss_value = list(map(float, loss_value))
-    plt.plot(record['epoch'], loss_value, 'red', label='loss')
+    plt.plot(record['epoch'], loss_value, label='loss')
     plt.plot(record['epoch'], record['acc'], label='acc')
+    plt.xlabel('Epoch')
     plt.legend()
     plt.show()
     # plt.savefig('./acc.png')
@@ -135,8 +137,8 @@ def visualize_model(best_ckpt_path, class_name, val_ds):
     pred = np.argmax(output.asnumpy(), axis=1)
 
     # pred和labels 计算准确率
-    print('\nAccuracy is: '+str(accuracy_score(pred,labels))+'\n')
-    print(classification_report(pred,labels))
+    print('\nAccuracy is: ' + str(accuracy_score(pred, labels)) + '\n')
+    print(classification_report(pred, labels))
 
     # 可视化模型预测
     plt.figure(figsize=(12, 7))
@@ -170,7 +172,7 @@ if __name__ == '__main__':
     count = 1
     batch_size = 32
     net = resnet50(class_num=4)
-    num_epochs = 100
+    num_epochs = 3
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
     val_ds = val_ds.batch(batch_size=batch_size, drop_remainder=True)
