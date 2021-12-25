@@ -169,10 +169,9 @@ if __name__ == '__main__':
     val_ds = create_dataset(val_data_path, training=False)
 
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
-    count = 1
-    batch_size = 32
     net = resnet50(class_num=4)
-    num_epochs = 3
+    batch_size = 32
+    num_epochs = 200
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
     val_ds = val_ds.batch(batch_size=batch_size, drop_remainder=True)
