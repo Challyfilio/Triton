@@ -106,8 +106,8 @@ def curve_draw(record):
     sns.set_theme(style="whitegrid")
     loss_value = record['loss']
     loss_value = list(map(float, loss_value))
-    plt.plot(record['epoch'], loss_value, label='loss')
     plt.plot(record['epoch'], record['acc'], label='acc')
+    plt.plot(record['epoch'], loss_value, label='loss')
     plt.xlabel('Epoch')
     plt.legend()
     plt.show()
@@ -171,7 +171,7 @@ if __name__ == '__main__':
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
     net = resnet50(class_num=4)
     batch_size = 32
-    num_epochs = 200
+    num_epochs = 150
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
     val_ds = val_ds.batch(batch_size=batch_size, drop_remainder=True)
