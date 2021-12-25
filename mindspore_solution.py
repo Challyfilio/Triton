@@ -116,7 +116,7 @@ def curve_draw(record):
 
 # 验证方法
 def net_test(best_ckpt_path, model, ds):
-    net = resnet50(class_num=4)
+    net = resnet101(class_num=4)
     param_dict = load_checkpoint(best_ckpt_path)
     load_param_into_net(net, param_dict)
     acc = model.eval(ds)
@@ -125,7 +125,7 @@ def net_test(best_ckpt_path, model, ds):
 
 # 定义网络并加载参数，对验证集进行预测
 def visualize_model(best_ckpt_path, class_name, val_ds):
-    net = resnet50(class_num=4)
+    net = resnet101(class_num=4)
     param_dict = load_checkpoint(best_ckpt_path)
     load_param_into_net(net, param_dict)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')
@@ -169,9 +169,9 @@ if __name__ == '__main__':
     val_ds = create_dataset(val_data_path, training=False)
 
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
-    net = resnet50(class_num=4)
+    net = resnet101(class_num=4)
     batch_size = 32
-    num_epochs = 150
+    num_epochs = 100
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
     val_ds = val_ds.batch(batch_size=batch_size, drop_remainder=True)
@@ -179,7 +179,7 @@ if __name__ == '__main__':
     # image_show(val_ds, class_name)
 
     # 加载预训练模型
-    pretrained = 'resnet50_imagenet2012.ckpt'
+    pretrained = 'resnet101_imagenet2012.ckpt'
     param_dict = load_checkpoint(pretrained)
 
     # 获取全连接层的名字
@@ -204,7 +204,7 @@ if __name__ == '__main__':
 
     # 训练模型
     print('-' * 20)
-    print(pretrained + '\nepoch = ' + str(num_epochs) + '\nbatch = ' + str(batch_size))
+    print(pretrained + '\nepoch = ' + str(num_epochs) + '\nbatch = ' + str(batch_size) + '\n')
     model.train(num_epochs,
                 train_ds,
                 callbacks=[eval_cb, TimeMonitor()],
