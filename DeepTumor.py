@@ -1,7 +1,7 @@
 """
 author: Xie RL
 """
-from modelz.src.resnet import resnet50
+from resnet_x import resnet50
 from mindspore import nn, Model, context
 import mindspore.dataset as ds
 import mindspore.dataset.vision.c_transforms as c_trans
@@ -36,7 +36,7 @@ def eval_show(epoch_per_eval):
     plt.ylabel("Model accuracy")
     plt.title("Model accuracy variation chart")
     plt.plot(epoch_per_eval["epoch"], epoch_per_eval["acc"], "red")
-    # plt.savefig('./acc.png')
+    plt.savefig('./acc.png')
     plt.show()
 
 
@@ -57,11 +57,10 @@ def main():
     Training_size = 3265  # 训练集大小
     batch_size = 32  # 每批次大小
     eval_per_epoch = 2  # 检查精度的轮次间隔
-    epoch_size = 4  # 伦次数量
+    epoch_size = 200  # 伦次数量
 
     dataset1 = ds.ImageFolderDataset(dataset_dir=train_path, class_indexing=label_list, shuffle=True)
     eval1 = ds.ImageFolderDataset(dataset_dir=test_path, class_indexing=label_list, shuffle=True)
-
 
     # 缩放至224*224，并转换为CHW（符合resNet50）
     transforms_list = [c_trans.Decode(),
@@ -71,7 +70,7 @@ def main():
     dataset2 = dataset1.map(operations=transforms_list, input_columns=["image"])
     eval2 = eval1.map(operations=transforms_list, input_columns=["image"])
 
-    type_cast_op = C2.TypeCast(mstype.float32)######################
+    type_cast_op = C2.TypeCast(mstype.float32)
     dataset3 = dataset2.map(operations=type_cast_op, input_columns=["image"])
     eval3 = eval2.map(operations=type_cast_op, input_columns=["image"])
 
@@ -107,7 +106,7 @@ def main():
     # summary_collector = SummaryCollector(summary_dir=summary_path, collect_freq=1)
 
     model.train(epoch_size, dataset3, callbacks=[ckpoint_cb, loss_cb, Time_cb, eval_cb],
-                dataset_sink_mode=True)
+                dataset_sink_mode=False)
 
     # 绘制精度曲线
     eval_show(epoch_per_eval)
