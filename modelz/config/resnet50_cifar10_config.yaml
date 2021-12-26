@@ -21,7 +21,7 @@ infer_label: ""
 class_num: 10
 batch_size: 32
 loss_scale: 1024
-momentum: 0.9
+momentum: 0.9 #————————————————
 weight_decay: 0.0001
 epoch_size: 90
 pretrain_epoch_size: 0
