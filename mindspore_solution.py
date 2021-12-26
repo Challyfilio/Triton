@@ -30,6 +30,8 @@ def create_dataset(data_path, training=True):
     std = [0.229 * 255, 0.224 * 255, 0.225 * 255]
     if training:
         trans = [
+            # CV.Decode(),
+            # CV.Resize(size=[224, 224]),
             CV.RandomCropDecodeResize(image_size, scale=(0.08, 1.0), ratio=(0.75, 1.333)),
             CV.RandomHorizontalFlip(prob=0.5),
             CV.Normalize(mean=mean, std=std),
