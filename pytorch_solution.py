@@ -92,8 +92,7 @@ def visualize_model(best_net):  # best_net
     images_so_far = 0
     fig = plt.figure(figsize=(15, 10))
 
-
-    #----------12.21 20:20
+    # ----------12.21 20:20
     data = next(iter(val_loader))
     images = data[0].numpy()
     labels = data[1].numpy()
@@ -113,8 +112,7 @@ def visualize_model(best_net):  # best_net
         plt.imshow(picture_show)
         plt.axis('off')
     plt.show()
-    #----------12.21 20:20
-
+    # ----------12.21 20:20
 
     # i,data = enumerate(val_loader)
     # inputs, labels = data
