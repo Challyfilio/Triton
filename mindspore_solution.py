@@ -16,7 +16,6 @@ from mindspore.train.callback import TimeMonitor
 from mindspore import Model, Tensor, context, load_checkpoint, load_param_into_net
 
 from modelz.src.resnet import *
-from modelzv.src.vgg import vgg16
 from callback import EvalCallBack
 from sklearn.metrics import accuracy_score, classification_report
 
@@ -182,7 +181,8 @@ if __name__ == '__main__':
     # image_show(val_ds, class_name)
 
     # 加载预训练模型
-    pretrained = 'resnet50_imagenet2012.ckpt'
+    # pretrained = 'resnet50_imagenet2012.ckpt'
+    pretrained = 'best1.ckpt'
     param_dict = load_checkpoint(pretrained)
 
     # 获取全连接层的名字
@@ -194,8 +194,15 @@ if __name__ == '__main__':
     # 给网络加载参数
     load_param_into_net(net, param_dict)
 
+    #——————————————
+    # 冻结除最后一层外的所有参数
+    # for param in net.get_parameters():
+    #     if param.name not in ["end_point.weight", "end_point.bias"]:
+    #         param.requires_grad = False
+    #——————————————
+
     # 定义优化器和损失函数
-    opt = nn.Momentum(params=net.trainable_params(), learning_rate=0.001, momentum=0.9)
+    opt = nn.Momentum(params=net.trainable_params(), learning_rate=0.1, momentum=0.9)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')
 
     # 实例化模型
