@@ -1,6 +1,6 @@
 """
-v2.0
-2021/12/24
+v3.0
+2021/12/27
 Challyfilio
 """
 import numpy as np
@@ -118,8 +118,7 @@ def curve_draw(record):
 
 
 # 验证方法
-def net_test(best_ckpt_path, model, ds):
-    net = resnet50(class_num=4)
+def net_test(net, best_ckpt_path, model, ds):
     param_dict = load_checkpoint(best_ckpt_path)
     load_param_into_net(net, param_dict)
     acc = model.eval(ds)
@@ -127,8 +126,7 @@ def net_test(best_ckpt_path, model, ds):
 
 
 # 定义网络并加载参数，对验证集进行预测
-def visualize_model(best_ckpt_path, class_name, val_ds):
-    net = resnet50(class_num=4)
+def visualize_model(net, best_ckpt_path, class_name, val_ds):
     param_dict = load_checkpoint(best_ckpt_path)
     load_param_into_net(net, param_dict)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')
@@ -174,7 +172,7 @@ if __name__ == '__main__':
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
     net = resnet50(class_num=4)
     batch_size = 32
-    num_epochs = 150
+    num_epochs = 20
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
     val_ds = val_ds.batch(batch_size=batch_size, drop_remainder=True)
@@ -183,7 +181,6 @@ if __name__ == '__main__':
 
     # 加载预训练模型
     pretrained = 'resnet50_imagenet2012.ckpt'
-    # pretrained = 'best1.ckpt'
     param_dict = load_checkpoint(pretrained)
 
     # 获取全连接层的名字
@@ -195,16 +192,17 @@ if __name__ == '__main__':
     # 给网络加载参数
     load_param_into_net(net, param_dict)
 
-    #——————————————
+    # ——————————————
     # 冻结除最后一层外的所有参数
     # for param in net.get_parameters():
     #     if param.name not in ["end_point.weight", "end_point.bias"]:
     #         param.requires_grad = False
-    #——————————————
+    # ——————————————
 
     # 定义优化器和损失函数
     opt = nn.Momentum(params=net.trainable_params(), learning_rate=0.001, momentum=0.9)
-    loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')
+    # opt = nn.Adam(params=net.trainable_params(), learning_rate=0.001)
+    loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
 
     # 实例化模型
     model = Model(net, loss, opt, metrics={"Accuracy": nn.Accuracy()})
@@ -224,5 +222,5 @@ if __name__ == '__main__':
     # print(epoch_per_eval)
     curve_draw(epoch_per_eval)
 
-    net_test('best.ckpt', model, val_ds)
-    visualize_model('best.ckpt', class_name, val_ds)
+    net_test(net, 'best.ckpt', model, val_ds)
+    visualize_model(net, 'best.ckpt', class_name, val_ds)
