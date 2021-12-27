@@ -171,7 +171,7 @@ if __name__ == '__main__':
     val_ds = create_dataset(val_data_path, training=False)
 
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
-    net = resnet101(class_num=4)
+    net = resnet50(class_num=4)
     batch_size = 32
     num_epochs = 200
 
@@ -181,7 +181,7 @@ if __name__ == '__main__':
     # image_show(val_ds, class_name)
 
     # 加载预训练模型
-    pretrained = 'resnet101_imagenet2012.ckpt'
+    pretrained = 'resnet50_imagenet2012.ckpt'
     param_dict = load_checkpoint(pretrained)
 
     # 获取全连接层的名字
