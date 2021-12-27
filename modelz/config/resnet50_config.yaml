@@ -10,7 +10,7 @@ enable_profiling: False
 data_path: "/cache/data"
 output_path: "/cache/train"
 load_path: "/cache/checkpoint_path/"
-device_target: "GPU"
+device_target: "Ascend"
 checkpoint_path: "./checkpoint/"
 checkpoint_file_path: ""
 
@@ -31,7 +31,7 @@ keep_checkpoint_max: 10
 warmup_epochs: 5
 lr_decay_mode: "poly"
 lr_init: 0.01
-lr_end: 0.0001
+lr_end: 0.00001
 lr_max: 0.1
 lars_epsilon: 0.0
 lars_coefficient: 0.001
