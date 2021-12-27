@@ -22,7 +22,7 @@ from pprint import pprint, pformat
 import yaml
 
 # _config_path = "./config/resnet50_cifar10_config.yaml"
-_config_path = './config/resnet50_imagenet2012_config.yaml'
+_config_path = './config/resnet50_config.yaml'
 
 class Config:
     """
