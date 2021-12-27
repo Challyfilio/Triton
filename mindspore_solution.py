@@ -200,7 +200,7 @@ if __name__ == '__main__':
     #         param.requires_grad = False
     # ——————————————
 
-    lr = Tensor(get_lr(0, lr_max=0.001, total_epochs=1, steps_per_epoch=1562))
+    lr = Tensor(get_lr(0, lr_max=0.8, total_epochs=1, steps_per_epoch=1562))
     # 定义优化器和损失函数
     opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
     # opt = nn.Adam(params=net.trainable_params(), learning_rate=0.001)
