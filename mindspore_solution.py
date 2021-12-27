@@ -202,7 +202,7 @@ if __name__ == '__main__':
     #——————————————
 
     # 定义优化器和损失函数
-    opt = nn.Momentum(params=net.trainable_params(), learning_rate=0.1, momentum=0.9)
+    opt = nn.Momentum(params=net.trainable_params(), learning_rate=0.01, momentum=0.9)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')
 
     # 实例化模型
