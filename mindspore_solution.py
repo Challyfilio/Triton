@@ -33,7 +33,8 @@ def create_dataset(data_path, training=True):
             # CV.Decode(),
             # CV.Resize(size=[224, 224]),
             CV.RandomCropDecodeResize(image_size, scale=(0.08, 1.0), ratio=(0.75, 1.333)),
-            CV.RandomHorizontalFlip(prob=0.5),
+            CV.RandomHorizontalFlip(prob=0.3),
+            CV.RandomVerticalFlip(prob=0.2),
             CV.Normalize(mean=mean, std=std),
             CV.HWC2CHW()
             # CV.Decode(),
