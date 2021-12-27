@@ -16,6 +16,7 @@ from mindspore.train.callback import TimeMonitor
 from mindspore import Model, Tensor, context, load_checkpoint, load_param_into_net
 
 from modelz.src.resnet import *
+from modelzv.src.vgg import vgg16
 from callback import EvalCallBack
 from sklearn.metrics import accuracy_score, classification_report
 
@@ -173,7 +174,7 @@ if __name__ == '__main__':
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
     net = resnet50(class_num=4)
     batch_size = 32
-    num_epochs = 100
+    num_epochs = 150
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
     val_ds = val_ds.batch(batch_size=batch_size, drop_remainder=True)
