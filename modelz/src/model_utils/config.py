@@ -21,13 +21,14 @@ import argparse
 from pprint import pprint, pformat
 import yaml
 
-# _config_path = "./config/resnet50_cifar10_config.yaml"
-_config_path = './config/resnet50_config.yaml'
+_config_path = './config/resnet50_cifar10_config.yaml'
+
 
 class Config:
     """
     Configuration namespace. Convert dictionary to members.
     """
+
     def __init__(self, cfg_dict):
         for k, v in cfg_dict.items():
             if isinstance(v, (list, tuple)):
@@ -119,7 +120,8 @@ def get_config():
     parser = argparse.ArgumentParser(description="default name", add_help=False)
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parser.add_argument("--config_path", type=str, default=os.path.join(current_dir, \
-        "../../config/resnet50_cifar10_config.yaml"), help="Config file path")
+                                                                        "../../config/resnet50_cifar10_config.yaml"),
+                        help="Config file path")
     path_args, _ = parser.parse_known_args()
     default, helper, choices = parse_yaml(path_args.config_path)
     args = parse_cli_to_yaml(parser=parser, cfg=default, helper=helper, choices=choices, cfg_path=path_args.config_path)
@@ -127,5 +129,6 @@ def get_config():
     pprint(final_config)
     print("Please check the above information for the configurations", flush=True)
     return Config(final_config)
+
 
 config = get_config()
