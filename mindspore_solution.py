@@ -34,8 +34,8 @@ def create_dataset(data_path, training=True):
             # CV.Decode(),
             # CV.Resize(size=[224, 224]),
             CV.RandomCropDecodeResize(image_size, scale=(0.08, 1.0), ratio=(0.75, 1.333)),
-            CV.RandomHorizontalFlip(prob=0.3),
-            CV.RandomVerticalFlip(prob=0.2),
+            CV.RandomHorizontalFlip(prob=0.5),
+            # CV.RandomVerticalFlip(prob=0.2),
             CV.Normalize(mean=mean, std=std),
             CV.HWC2CHW()
             # CV.Decode(),
@@ -181,7 +181,7 @@ if __name__ == '__main__':
     # image_show(val_ds, class_name)
 
     # 加载预训练模型
-    pretrained = 'resnet50.ckpt'
+    pretrained = 'resnet50_imagenet2012.ckpt'
     param_dict = load_checkpoint(pretrained)
 
     # 获取全连接层的名字
@@ -200,10 +200,12 @@ if __name__ == '__main__':
     #         param.requires_grad = False
     # ——————————————
 
-    lr = Tensor(get_lr(0, lr_max=0.1, total_epochs=90, steps_per_epoch=1562))
+    # lr = Tensor(get_lr(0, lr_max=0.01, total_epochs=90, steps_per_epoch=1562))
+    lr = 0.0001
     # 定义优化器和损失函数
-    opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
+    # opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
     # opt = nn.Adam(params=net.trainable_params(), learning_rate=0.001)
+    opt = nn.SGD(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
 
     # 实例化模型
