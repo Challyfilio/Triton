@@ -16,7 +16,7 @@ from mindspore.train.callback import TimeMonitor
 from mindspore import Model, Tensor, context, load_checkpoint, load_param_into_net
 
 from modelz.src.resnet import *
-# from modelvgg16.src.vgg import vgg16
+from modelvgg16.src.vgg import vgg16
 from callback import EvalCallBack
 from generator_lr import get_lr
 from sklearn.metrics import accuracy_score, classification_report
@@ -176,10 +176,10 @@ if __name__ == '__main__':
     # net = vgg16([64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'M', 512, 512, 512, 'M', 512, 512, 512, 'M'],
     #             num_classes=4, batch_norm=False, batch_size=1)
     batch_size = 32
-    num_epochs = 150
+    num_epochs = 100
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
-    val_ds = val_ds.batch(batch_size=batch_size, drop_remainder=True)
+    val_ds = val_ds.batch(batch_size=394, drop_remainder=True)
     image_show(train_ds, class_name)
     # image_show(val_ds, class_name)
 
@@ -204,12 +204,12 @@ if __name__ == '__main__':
             param.requires_grad = False
     # ——————————————
 
-    lr = Tensor(get_lr(0, lr_max=0.1, total_epochs=200, steps_per_epoch=32))
-    # lr = 0.0001
+    # lr = Tensor(get_lr(0, lr_max=0.1, total_epochs=200, steps_per_epoch=32))
+    lr = 0.0005
     # 定义优化器和损失函数
     # opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
     # opt = nn.Adam(params=net.trainable_params(), learning_rate=0.001)
-    opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.0001)
+    opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
 
     # 实例化模型
