@@ -176,12 +176,12 @@ if __name__ == '__main__':
     # net = vgg16([64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'M', 512, 512, 512, 'M', 512, 512, 512, 'M'],
     #             num_classes=4, batch_norm=False, batch_size=1)
     batch_size = 32
-    num_epochs = 100
+    num_epochs = 200
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
     val_ds = val_ds.batch(batch_size=394, drop_remainder=True)
     image_show(train_ds, class_name)
-    # image_show(val_ds, class_name)
+    # image_show(val_ds1, class_name)
 
     # 加载预训练模型
     pretrained = 'resnet50_imagenet2012.ckpt'
@@ -199,9 +199,9 @@ if __name__ == '__main__':
 
     # ——————————————
     # 冻结除最后一层外的所有参数
-    for param in net.get_parameters():
-        if param.name not in ["end_point.weight", "end_point.bias"]:
-            param.requires_grad = False
+    # for param in net.get_parameters():
+    #     if param.name not in ["end_point.weight", "end_point.bias"]:
+    #         param.requires_grad = False
     # ——————————————
 
     # lr = Tensor(get_lr(0, lr_max=0.1, total_epochs=200, steps_per_epoch=32))
@@ -231,4 +231,4 @@ if __name__ == '__main__':
     curve_draw(epoch_per_eval)
 
     net_test(net, 'best.ckpt', model, val_ds)
-    visualize_model(net, 'best.ckpt', class_name, val_ds)
+    # visualize_model(net, 'best.ckpt', class_name, val_ds)
