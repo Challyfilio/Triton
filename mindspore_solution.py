@@ -173,7 +173,7 @@ if __name__ == '__main__':
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
     net = resnet50(class_num=4)
     batch_size = 32
-    num_epochs = 200
+    num_epochs = 150
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
     val_ds = val_ds.batch(batch_size=batch_size, drop_remainder=True)
