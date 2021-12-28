@@ -35,7 +35,7 @@ def create_dataset(data_path, training=True):
             # CV.Resize(size=[224, 224]),
             CV.RandomCropDecodeResize(image_size, scale=(0.08, 1.0), ratio=(0.75, 1.333)),
             CV.RandomHorizontalFlip(prob=0.5),
-            # CV.RandomVerticalFlip(prob=0.2),
+            CV.RandomVerticalFlip(prob=0.2),
             CV.Normalize(mean=mean, std=std),
             CV.HWC2CHW()
             # CV.Decode(),
@@ -181,7 +181,8 @@ if __name__ == '__main__':
     # image_show(val_ds, class_name)
 
     # 加载预训练模型
-    pretrained = 'resnet50_imagenet2012.ckpt'
+    # pretrained = 'resnet50_imagenet2012.ckpt'
+    pretrained = 'Indigo.ckpt'
     param_dict = load_checkpoint(pretrained)
 
     # 获取全连接层的名字
@@ -195,9 +196,9 @@ if __name__ == '__main__':
 
     # ——————————————
     # 冻结除最后一层外的所有参数
-    # for param in net.get_parameters():
-    #     if param.name not in ["end_point.weight", "end_point.bias"]:
-    #         param.requires_grad = False
+    for param in net.get_parameters():
+        if param.name not in ["end_point.weight", "end_point.bias"]:
+            param.requires_grad = False
     # ——————————————
 
     # lr = Tensor(get_lr(0, lr_max=0.01, total_epochs=90, steps_per_epoch=1562))
@@ -205,7 +206,7 @@ if __name__ == '__main__':
     # 定义优化器和损失函数
     # opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
     # opt = nn.Adam(params=net.trainable_params(), learning_rate=0.001)
-    opt = nn.SGD(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
+    opt = nn.Adagrad(params=net.trainable_params(), learning_rate=0.001, weight_decay=0.0)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
 
     # 实例化模型
