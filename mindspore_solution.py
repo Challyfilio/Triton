@@ -16,7 +16,7 @@ from mindspore.train.callback import TimeMonitor
 from mindspore import Model, Tensor, context, load_checkpoint, load_param_into_net
 
 from modelz.src.resnet import *
-from modelvgg16.src.vgg import vgg16
+# from modelvgg16.src.vgg import vgg16
 from callback import EvalCallBack
 from generator_lr import get_lr
 from sklearn.metrics import accuracy_score, classification_report
@@ -184,8 +184,8 @@ if __name__ == '__main__':
     # image_show(val_ds, class_name)
 
     # 加载预训练模型
-    # pretrained = 'resnet50_imagenet2012.ckpt'
-    pretrained = 'Indigo.ckpt'
+    pretrained = 'resnet50_imagenet2012.ckpt'
+    # pretrained = 'Indigo.ckpt'
     param_dict = load_checkpoint(pretrained)
 
     # 获取全连接层的名字
@@ -204,21 +204,21 @@ if __name__ == '__main__':
             param.requires_grad = False
     # ——————————————
 
-    #————————————
+    # ————————————
     min_lr = 0.01
     max_lr = 0.1
     total_step = 6
     step_size = 1
     decay_epoch = 4
     lr = nn.cosine_decay_lr(min_lr, max_lr, total_step, step_size, decay_epoch)
-    #————————————
+    # ————————————
 
-    # lr = Tensor(get_lr(0, lr_max=0.01, total_epochs=90, steps_per_epoch=1562))
+    # lr = Tensor(get_lr(0, lr_max=0.1, total_epochs=90, steps_per_epoch=1562))
     # lr = 0.0001
     # 定义优化器和损失函数
     # opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
     # opt = nn.Adam(params=net.trainable_params(), learning_rate=0.001)
-    opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.1)
+    opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.0001)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
 
     # 实例化模型
