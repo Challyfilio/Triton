@@ -181,7 +181,7 @@ if __name__ == '__main__':
     # image_show(val_ds, class_name)
 
     # 加载预训练模型
-    pretrained = 'resnet50_imagenet2012.ckpt'
+    pretrained = 'resnet50.ckpt'
     param_dict = load_checkpoint(pretrained)
 
     # 获取全连接层的名字
@@ -200,7 +200,7 @@ if __name__ == '__main__':
     #         param.requires_grad = False
     # ——————————————
 
-    lr = Tensor(get_lr(0, lr_max=0.01, total_epochs=90, steps_per_epoch=1562))
+    lr = Tensor(get_lr(0, lr_max=0.1, total_epochs=90, steps_per_epoch=1562))
     # 定义优化器和损失函数
     opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
     # opt = nn.Adam(params=net.trainable_params(), learning_rate=0.001)
