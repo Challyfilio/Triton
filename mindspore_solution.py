@@ -204,16 +204,7 @@ if __name__ == '__main__':
             param.requires_grad = False
     # ——————————————
 
-    # ————————————
-    min_lr = 0.01
-    max_lr = 0.1
-    total_step = 6
-    step_size = 1
-    decay_epoch = 4
-    lr = nn.cosine_decay_lr(min_lr, max_lr, total_step, step_size, decay_epoch)
-    # ————————————
-
-    # lr = Tensor(get_lr(0, lr_max=0.1, total_epochs=90, steps_per_epoch=1562))
+    lr = Tensor(get_lr(0, lr_max=0.1, total_epochs=200, steps_per_epoch=32))
     # lr = 0.0001
     # 定义优化器和损失函数
     # opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
