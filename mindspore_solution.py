@@ -37,6 +37,7 @@ def create_dataset(data_path, training=True):
             CV.RandomCropDecodeResize(image_size, scale=(0.08, 1.0), ratio=(0.75, 1.333)),
             CV.RandomHorizontalFlip(prob=0.5),
             CV.RandomVerticalFlip(prob=0.2),
+            CV.RandomColorAdjust(contrast=0.5),
             CV.Normalize(mean=mean, std=std),
             CV.HWC2CHW()
             # CV.Decode(),
@@ -176,12 +177,12 @@ if __name__ == '__main__':
     # net = vgg16([64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'M', 512, 512, 512, 'M', 512, 512, 512, 'M'],
     #             num_classes=4, batch_norm=False, batch_size=1)
     batch_size = 32
-    num_epochs = 200
+    num_epochs = 150
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
     val_ds = val_ds.batch(batch_size=394, drop_remainder=True)
-    # image_show(train_ds, class_name)
-    # image_show(val_ds1, class_name)
+    image_show(train_ds, class_name)
+    # image_show(val_ds, class_name)
 
     # 加载预训练模型
     pretrained = 'resnet50_imagenet2012.ckpt'
@@ -205,17 +206,23 @@ if __name__ == '__main__':
     # ——————————————
 
     # lr = Tensor(get_lr(0, lr_max=0.1, total_epochs=200, steps_per_epoch=32))
-    lr = 0.0005
+    # lr = 0.0005
+    lr = nn.dynamic_lr.natural_exp_decay_lr(learning_rate=0.05,
+                                            decay_rate=0.5,
+                                            total_step=num_epochs,
+                                            step_per_epoch=10,
+                                            decay_epoch=10)
+    print(lr)
     # 定义优化器和损失函数
     # opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
-    # opt = nn.Adam(params=net.trainable_params(), learning_rate=0.001)
+    # opt = nn.Adam(params=net.trainable_params(), learning_rate=lr)
     opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
 
     # 实例化模型
     model = Model(net, loss, opt, metrics={"Accuracy": nn.Accuracy()})
 
-    # net_test(net, 'Kepler.ckpt', model, val_ds)
+    # net_test(net, 'best.ckpt', model, val_ds)
     # exit(0)
 
     eval_param_dict = {"model": model, "dataset": val_ds, "metrics_name": "Accuracy"}
