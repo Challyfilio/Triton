@@ -168,8 +168,8 @@ if __name__ == '__main__':
     # GPU
     context.set_context(mode=context.GRAPH_MODE, device_target="GPU")
 
-    train_data_path = 'data0/Tumor/Training'
-    val_data_path = 'data0/Tumor/Testing'
+    train_data_path = 'data/Tumor/Training'
+    val_data_path = 'data/Tumor/Testing'
 
     train_ds = create_dataset(train_data_path, training=True)
     val_ds = create_dataset(val_data_path, training=False)
@@ -186,7 +186,6 @@ if __name__ == '__main__':
 
     # 加载预训练模型
     pretrained = 'resnet50_imagenet2012.ckpt'
-    # pretrained = 'Indigo.ckpt'
     param_dict = load_checkpoint(pretrained)
 
     # 获取全连接层的名字
@@ -215,9 +214,10 @@ if __name__ == '__main__':
     # 实例化模型
     model = Model(net, loss, opt, metrics={"Accuracy": nn.Accuracy()})
 
-    net_test(net, 'Kepler.ckpt', model, val_ds)
-    visualize_model(net, 'Kepler.ckpt', class_name, val_ds)
-    exit(0)
+    # 测试模型用
+    # net_test(net, 'Kepler.ckpt', model, val_ds)
+    # visualize_model(net, 'Kepler.ckpt', class_name, val_ds)
+    # exit(0)
 
     eval_param_dict = {"model": model, "dataset": val_ds, "metrics_name": "Accuracy"}
     epoch_per_eval = {"epoch": [], "loss": [], "acc": []}
