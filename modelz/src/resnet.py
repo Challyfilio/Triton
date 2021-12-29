@@ -138,7 +138,7 @@ def _conv1x1(in_channel, out_channel, stride=1, use_se=False, res_base=False):
                      padding=0, pad_mode='same', weight_init=weight)
 
 
-def _conv7x7(in_channel, out_channel, stride=2, use_se=False, res_base=False):
+def _conv7x7(in_channel, out_channel, stride=1, use_se=False, res_base=False):
     if use_se:
         weight = conv_variance_scaling_initializer(in_channel, out_channel, kernel_size=7)
     else:
@@ -396,7 +396,7 @@ class ResNet(nn.Cell):
             self.bn1_1 = _bn(32)
             self.conv1_2 = _conv3x3(32, 64, stride=1, use_se=self.use_se)
         else:
-            self.conv1 = _conv7x7(3, 64, stride=2, res_base=self.res_base)
+            self.conv1 = _conv7x7(3, 64, stride=1, res_base=self.res_base)
         self.bn1 = _bn(64, self.res_base)
         self.relu = P.ReLU()
 
