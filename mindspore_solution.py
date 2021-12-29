@@ -180,7 +180,7 @@ if __name__ == '__main__':
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
     val_ds = val_ds.batch(batch_size=394, drop_remainder=True)
-    image_show(train_ds, class_name)
+    # image_show(train_ds, class_name)
     # image_show(val_ds1, class_name)
 
     # 加载预训练模型
@@ -214,6 +214,9 @@ if __name__ == '__main__':
 
     # 实例化模型
     model = Model(net, loss, opt, metrics={"Accuracy": nn.Accuracy()})
+
+    # net_test(net, 'Kepler.ckpt', model, val_ds)
+    # exit(0)
 
     eval_param_dict = {"model": model, "dataset": val_ds, "metrics_name": "Accuracy"}
     epoch_per_eval = {"epoch": [], "loss": [], "acc": []}
