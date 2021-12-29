@@ -31,9 +31,9 @@ def create_dataset(data_path, training=True):
     std = [0.229 * 255, 0.224 * 255, 0.225 * 255]
     if training:
         trans = [
-            # CV.Decode(),
-            # CV.Resize(size=[224, 224]),
-            CV.RandomCropDecodeResize(image_size, scale=(0.08, 1.0), ratio=(0.75, 1.333)),
+            CV.Decode(),
+            CV.Resize(size=[224, 224]),
+            # CV.RandomCropDecodeResize(image_size, scale=(0.08, 1.0), ratio=(0.75, 1.0)),
             CV.RandomHorizontalFlip(prob=0.5),
             CV.RandomVerticalFlip(prob=0.2),
             CV.RandomColorAdjust(contrast=0.5),
@@ -47,8 +47,8 @@ def create_dataset(data_path, training=True):
     else:
         trans = [
             CV.Decode(),
-            CV.Resize(size=[256, 256]),
-            CV.CenterCrop(image_size),
+            CV.Resize(size=[224, 224]),
+            # CV.CenterCrop(image_size),
             CV.Normalize(mean=mean, std=std),
             CV.HWC2CHW()
         ]
@@ -143,6 +143,8 @@ def visualize_model(net, best_ckpt_path, class_name, val_ds):
     print('\nAccuracy is: ' + str(accuracy_score(pred, labels)) + '\n')
     print(classification_report(pred, labels))
 
+    '''
+    暂时不用
     # 可视化模型预测
     plt.figure(figsize=(12, 7))
     for i in range(len(labels)):
@@ -159,14 +161,15 @@ def visualize_model(net, best_ckpt_path, class_name, val_ds):
         plt.imshow(picture_show)
         plt.axis('off')
     plt.show()
+    '''
 
 
 if __name__ == '__main__':
     # GPU
     context.set_context(mode=context.GRAPH_MODE, device_target="GPU")
 
-    train_data_path = 'data/Tumor/Training'
-    val_data_path = 'data/Tumor/Testing'
+    train_data_path = 'data0/Tumor/Training'
+    val_data_path = 'data0/Tumor/Testing'
 
     train_ds = create_dataset(train_data_path, training=True)
     val_ds = create_dataset(val_data_path, training=False)
@@ -206,14 +209,15 @@ if __name__ == '__main__':
     # 定义优化器和损失函数
     # opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
     # opt = nn.Adam(params=net.trainable_params(), learning_rate=lr)
-    opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.01)
+    opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
 
     # 实例化模型
     model = Model(net, loss, opt, metrics={"Accuracy": nn.Accuracy()})
 
-    # net_test(net, 'best.ckpt', model, val_ds)
-    # exit(0)
+    net_test(net, 'Kepler.ckpt', model, val_ds)
+    visualize_model(net, 'Kepler.ckpt', class_name, val_ds)
+    exit(0)
 
     eval_param_dict = {"model": model, "dataset": val_ds, "metrics_name": "Accuracy"}
     epoch_per_eval = {"epoch": [], "loss": [], "acc": []}
