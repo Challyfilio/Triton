@@ -231,4 +231,4 @@ if __name__ == '__main__':
     curve_draw(epoch_per_eval)
 
     net_test(net, 'best.ckpt', model, val_ds)
-    # visualize_model(net, 'best.ckpt', class_name, val_ds)
+    visualize_model(net, 'best.ckpt', class_name, val_ds)
