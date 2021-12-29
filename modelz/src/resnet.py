@@ -138,7 +138,7 @@ def _conv1x1(in_channel, out_channel, stride=1, use_se=False, res_base=False):
                      padding=0, pad_mode='same', weight_init=weight)
 
 
-def _conv7x7(in_channel, out_channel, stride=1, use_se=False, res_base=False):
+def _conv7x7(in_channel, out_channel, stride=2, use_se=False, res_base=False):
     if use_se:
         weight = conv_variance_scaling_initializer(in_channel, out_channel, kernel_size=7)
     else:
