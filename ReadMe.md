@@ -1,10 +1,10 @@
 没有数据集(自行准备)
 
-目录结构如下：
+目录结构及文件说明：
 
 ```
 ./
-└─resnet50.ckpt
+└─resnet50.ckpt 稍后上传
 └─modelz
 └─data
    └─Tumor
