@@ -6,7 +6,7 @@ from mindspore_solution import *
 
 if __name__ == '__main__':
     val_data_path = 'data/Tumor/Testing'
-    batch_size = 32
+    batch_size = 394
     pred_visualize = False
 
     val_ds = create_dataset(val_data_path, training=False)
