@@ -13,7 +13,7 @@ if __name__ == '__main__':
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
     net = resnet50(class_num=4)
     num_epochs = 210
-    # image_show(val_ds, class_name)
+    image_show(val_ds, class_name)
 
     lr = 0.0005
     # 定义优化器和损失函数
