@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
     net = resnet50(class_num=4)
-    lr = 0.0005
+    lr = 0.0001
     # 定义优化器和损失函数
     opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
