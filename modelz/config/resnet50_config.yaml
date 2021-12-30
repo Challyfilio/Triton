@@ -37,7 +37,7 @@ lars_epsilon: 0.0
 lars_coefficient: 0.001
 
 net_name: "resnet50"
-dataset: "cifar10"
+dataset: ""
 device_num: 1
 pre_trained: ""
 run_eval: False
