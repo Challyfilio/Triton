@@ -177,7 +177,7 @@ if __name__ == '__main__':
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
     net = resnet50(class_num=4)
     batch_size = 32
-    num_epochs = 210
+    num_epochs = 300
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
     val_ds = val_ds.batch(batch_size=394, drop_remainder=True)
@@ -205,11 +205,11 @@ if __name__ == '__main__':
     #         param.requires_grad = False
     # ——————————————
 
-    lr = 0.0005
+    lr = 0.00005
     # 定义优化器和损失函数
     # opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
-    # opt = nn.Adam(params=net.trainable_params(), learning_rate=lr)
-    opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
+    opt = nn.Adam(params=net.trainable_params(), learning_rate=lr)
+    # opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
     # loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
     loss = CrossEntropySmooth(sparse=True, reduction='mean',
                               smooth_factor=0.01,
