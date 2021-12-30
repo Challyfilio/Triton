@@ -24,4 +24,6 @@
 └─main.py 验证模型用（可视化）
 └─image_operate.ipynb 图像增广用 opencv
 ```
-
+扩充数据集图片来源：
+- [BrainWeb: Simulated Brain Database](https://brainweb.bic.mni.mcgill.ca/)
+- [Kaggle脑肿瘤数据集](https://pan.baidu.com/s/12RTIv-RqEZwYCm27Im2Djw%C2%A0) tave
