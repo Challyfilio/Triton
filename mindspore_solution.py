@@ -18,6 +18,7 @@ from mindspore import Model, Tensor, context, load_checkpoint, load_param_into_n
 from modelz.src.resnet import *
 from callback import EvalCallBack
 from sklearn.metrics import accuracy_score, classification_report
+from CrossEntropySmooth import CrossEntropySmooth
 
 
 def create_dataset(data_path, training=True):
@@ -209,7 +210,10 @@ if __name__ == '__main__':
     # opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
     # opt = nn.Adam(params=net.trainable_params(), learning_rate=lr)
     opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
-    loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
+    # loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
+    loss = CrossEntropySmooth(sparse=True, reduction='mean',
+                              smooth_factor=0.1,
+                              num_classes=4)
 
     # 实例化模型
     model = Model(net, loss, opt, metrics={"Accuracy": nn.Accuracy()})
