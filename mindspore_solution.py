@@ -16,9 +16,9 @@ from mindspore.train.callback import TimeMonitor
 from mindspore import Model, Tensor, context, load_checkpoint, load_param_into_net
 
 from modelz.src.resnet import *
+from modelz.src.CrossEntropySmooth import CrossEntropySmooth
 from callback import EvalCallBack
 from sklearn.metrics import accuracy_score, classification_report
-from CrossEntropySmooth import CrossEntropySmooth
 
 
 def create_dataset(data_path, training=True):
@@ -186,7 +186,7 @@ if __name__ == '__main__':
 
     # 加载预训练模型
     # pretrained = 'Luna.ckpt'
-    pretrained = 'resnet50_imagenet2012.ckpt'
+    pretrained = 'Triton.ckpt'
     param_dict = load_checkpoint(pretrained)
 
     # 获取全连接层的名字
