@@ -1,16 +1,14 @@
 '''
-验证模型用
+可视化验证模型用
 Challyfilio
 '''
 from mindspore_solution import *
 
 if __name__ == '__main__':
-    context.set_context(mode=context.GRAPH_MODE, device_target="GPU")
-
     val_data_path = 'data/Tumor/Testing'
 
     val_ds = create_dataset(val_data_path, training=False)
-    val_ds = val_ds.batch(batch_size=394, drop_remainder=True)
+    val_ds = val_ds.batch(batch_size=32, drop_remainder=True)
 
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
     net = resnet50(class_num=4)
