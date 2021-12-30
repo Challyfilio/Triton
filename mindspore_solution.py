@@ -1,6 +1,6 @@
 """
-v3.0
-2021/12/27
+v4.0
+2021/12/30 还有一天就跨年啦！
 Challyfilio
 """
 import numpy as np
@@ -17,7 +17,6 @@ from mindspore import Model, Tensor, context, load_checkpoint, load_param_into_n
 
 from modelz.src.resnet import *
 from callback import EvalCallBack
-from generator_lr import get_lr
 from sklearn.metrics import accuracy_score, classification_report
 
 
@@ -128,7 +127,7 @@ def net_test(net, best_ckpt_path, model, ds):
 
 
 # 定义网络并加载参数，对验证集进行预测
-def visualize_model(net, best_ckpt_path, class_name, val_ds):
+def visualize_model(net, best_ckpt_path, class_name, val_ds, pred_visualize=False):
     param_dict = load_checkpoint(best_ckpt_path)
     load_param_into_net(net, param_dict)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')
@@ -143,25 +142,25 @@ def visualize_model(net, best_ckpt_path, class_name, val_ds):
     print('\nAccuracy is: ' + str(accuracy_score(pred, labels)) + '\n')
     print(classification_report(pred, labels))
 
-    '''
-    暂时不用
-    # 可视化模型预测
-    plt.figure(figsize=(12, 7))
-    for i in range(len(labels)):
-        plt.subplot(4, 8, i + 1)
-        color = 'blue' if pred[i] == labels[i] else 'red'
-        plt.title(class_name[pred[i]], color=color)
-        picture_show = np.transpose(images[i], (1, 2, 0))
-        mean = np.array([0.485, 0.456, 0.406])
-        std = np.array([0.229, 0.224, 0.225])
-        picture_show = std * picture_show + mean
+    if pred_visualize:
+        # 可视化模型预测
+        plt.figure(figsize=(12, 7))
+        for i in range(len(labels)):
+            plt.subplot(4, 8, i + 1)
+            color = 'blue' if pred[i] == labels[i] else 'red'
+            plt.title(class_name[pred[i]], color=color)
+            picture_show = np.transpose(images[i], (1, 2, 0))
+            mean = np.array([0.485, 0.456, 0.406])
+            std = np.array([0.229, 0.224, 0.225])
+            picture_show = std * picture_show + mean
 
-        picture_show = picture_show / np.amax(picture_show)
-        picture_show = np.clip(picture_show, 0, 1)
-        plt.imshow(picture_show)
-        plt.axis('off')
-    plt.show()
-    '''
+            picture_show = picture_show / np.amax(picture_show)
+            picture_show = np.clip(picture_show, 0, 1)
+            plt.imshow(picture_show)
+            plt.axis('off')
+        plt.show()
+    else:
+        pass
 
 
 if __name__ == '__main__':
@@ -177,7 +176,7 @@ if __name__ == '__main__':
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
     net = resnet50(class_num=4)
     batch_size = 32
-    num_epochs = 210
+    num_epochs = 2
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
     val_ds = val_ds.batch(batch_size=394, drop_remainder=True)
@@ -185,7 +184,8 @@ if __name__ == '__main__':
     # image_show(val_ds, class_name)
 
     # 加载预训练模型
-    pretrained = 'resnet50_imagenet2012.ckpt'
+    pretrained = 'Luna.ckpt'
+    # pretrained = 'resnet50_imagenet2012.ckpt'
     param_dict = load_checkpoint(pretrained)
 
     # 获取全连接层的名字
@@ -216,7 +216,7 @@ if __name__ == '__main__':
 
     # 测试模型用
     # net_test(net, 'Kepler.ckpt', model, val_ds)
-    # visualize_model(net, 'Kepler.ckpt', class_name, val_ds)
+    # visualize_model(net, 'Kepler.ckpt', class_name, val_ds, pred_visualize=False)
     # exit(0)
 
     eval_param_dict = {"model": model, "dataset": val_ds, "metrics_name": "Accuracy"}
@@ -235,4 +235,4 @@ if __name__ == '__main__':
     curve_draw(epoch_per_eval)
 
     net_test(net, 'best.ckpt', model, val_ds)
-    visualize_model(net, 'best.ckpt', class_name, val_ds)
+    visualize_model(net, 'best.ckpt', class_name, val_ds, pred_visualize=False)
