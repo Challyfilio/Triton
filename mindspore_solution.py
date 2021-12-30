@@ -205,7 +205,7 @@ if __name__ == '__main__':
     #         param.requires_grad = False
     # ——————————————
 
-    lr = 0.0001
+    lr = 0.001
     # 定义优化器和损失函数
     # opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
     opt = nn.Adam(params=net.trainable_params(), learning_rate=lr)
