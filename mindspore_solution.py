@@ -184,8 +184,8 @@ if __name__ == '__main__':
     # image_show(val_ds, class_name)
 
     # 加载预训练模型
-    pretrained = 'Luna.ckpt'
-    # pretrained = 'resnet50_imagenet2012.ckpt'
+    # pretrained = 'Luna.ckpt'
+    pretrained = 'resnet50_imagenet2012.ckpt'
     param_dict = load_checkpoint(pretrained)
 
     # 获取全连接层的名字
