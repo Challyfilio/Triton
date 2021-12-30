@@ -4,7 +4,6 @@ Challyfilio
 '''
 from mindspore_solution import *
 
-
 if __name__ == '__main__':
     context.set_context(mode=context.GRAPH_MODE, device_target="GPU")
 
@@ -28,5 +27,8 @@ if __name__ == '__main__':
 
     # 测试模型用
     net_test(net, 'Luna.ckpt', model, val_ds)
-    visualize_model(net, 'Luna.ckpt', class_name, val_ds)
-
+    visualize_model(net,
+                    'Luna.ckpt',
+                    class_name,
+                    val_ds,
+                    pred_visualize=True)
