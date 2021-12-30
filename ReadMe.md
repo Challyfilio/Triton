@@ -21,7 +21,6 @@
 ├─pytorch_solution.py       # pytorch框架 不完善
 ├─mindspore_solution.py     # mindspore框架
 ├─callback.py               # mindspore_solution的回调类
-├─CrossEntropySmooth.py     # mindspore_solution的损失函数
 ├─main.py                   # 验证模型用(可视化)
 └─image_operate.ipynb       # 图像增广用(OpenCV)
 ```
