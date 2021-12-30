@@ -6,13 +6,14 @@ from mindspore_solution import *
 
 if __name__ == '__main__':
     val_data_path = 'data/Tumor/Testing'
+    batch_size = 32
+    pred_visualize = False
 
     val_ds = create_dataset(val_data_path, training=False)
-    val_ds = val_ds.batch(batch_size=32, drop_remainder=True)
+    val_ds = val_ds.batch(batch_size=batch_size, drop_remainder=True)
 
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
     net = resnet50(class_num=4)
-    num_epochs = 210
     image_show(val_ds, class_name)
 
     lr = 0.0005
@@ -25,8 +26,10 @@ if __name__ == '__main__':
 
     # 测试模型用
     net_test(net, 'Luna.ckpt', model, val_ds)
+    if batch_size == 32:
+        pred_visualize = True
     visualize_model(net,
                     'Luna.ckpt',
                     class_name,
                     val_ds,
-                    pred_visualize=True)
+                    pred_visualize=pred_visualize)
