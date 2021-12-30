@@ -212,7 +212,7 @@ if __name__ == '__main__':
     # opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
     # loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
     loss = CrossEntropySmooth(sparse=True, reduction='mean',
-                              smooth_factor=0.01,
+                              smooth_factor=0.1,
                               num_classes=4)
 
     # 实例化模型
