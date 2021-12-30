@@ -116,7 +116,7 @@ def curve_draw(record):
     plt.xlabel('Epoch')
     plt.legend()
     plt.show()
-    # plt.savefig('./acc.png')
+    plt.savefig('./acc.png')
 
 
 # 验证方法
@@ -205,11 +205,11 @@ if __name__ == '__main__':
     #         param.requires_grad = False
     # ——————————————
 
-    lr = 0.001
+    lr = 0.0005
     # 定义优化器和损失函数
     # opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
-    opt = nn.Adam(params=net.trainable_params(), learning_rate=lr)
-    # opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
+    # opt = nn.Adam(params=net.trainable_params(), learning_rate=lr)
+    opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
     # loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
     loss = CrossEntropySmooth(sparse=True, reduction='mean',
                               smooth_factor=0.1,
