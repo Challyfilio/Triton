@@ -203,7 +203,7 @@ if __name__ == '__main__':
 
     lr = 0.0005
     # 定义优化器和损失函数
-    # opt = nn.Momentum(params=net.trainable_params(), learning_rate=0.001, momentum=0.9)
+    # opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
     # opt = nn.Adam(params=net.trainable_params(), learning_rate=lr)
     opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
