@@ -35,7 +35,7 @@ def create_dataset(data_path, training=True):
             CV.Resize(size=[224, 224]),
             # CV.RandomCropDecodeResize(image_size, scale=(0.08, 1.0), ratio=(0.75, 1.0)),
             CV.RandomHorizontalFlip(prob=0.5),
-            CV.RandomVerticalFlip(prob=0.2),
+            CV.RandomVerticalFlip(prob=0.1),
             CV.RandomColorAdjust(contrast=0.5),
             CV.Normalize(mean=mean, std=std),
             CV.HWC2CHW()
@@ -181,7 +181,6 @@ if __name__ == '__main__':
     # image_show(val_ds, class_name)
 
     # 加载预训练模型
-    #pretrained = 'baseline'
     # pretrained = 'Luna.ckpt'
     pretrained = 'Triton.ckpt'
     param_dict = load_checkpoint(pretrained)
