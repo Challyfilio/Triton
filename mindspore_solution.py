@@ -177,7 +177,7 @@ if __name__ == '__main__':
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
     net = resnet50(class_num=4)
     batch_size = 32
-    num_epochs = 200
+    num_epochs = 220
 
     train_ds = train_ds.batch(batch_size=batch_size, drop_remainder=True)
     val_ds = val_ds.batch(batch_size=394, drop_remainder=True)
@@ -185,19 +185,19 @@ if __name__ == '__main__':
     # image_show(val_ds, class_name)
 
     # 加载预训练模型
-    pretrained = 'baseline'
+    #pretrained = 'baseline'
     # pretrained = 'Luna.ckpt'
-    # pretrained = 'Triton.ckpt'
-    # param_dict = load_checkpoint(pretrained)
-    #
-    # # 获取全连接层的名字
-    # filter_list = [x.name for x in net.end_point.get_parameters()]
-    #
-    # # 删除预训练模型的全连接层
-    # filter_checkpoint_parameter_by_list(param_dict, filter_list)
-    #
-    # # 给网络加载参数
-    # load_param_into_net(net, param_dict)
+    pretrained = 'Triton.ckpt'
+    param_dict = load_checkpoint(pretrained)
+
+    # 获取全连接层的名字
+    filter_list = [x.name for x in net.end_point.get_parameters()]
+
+    # 删除预训练模型的全连接层
+    filter_checkpoint_parameter_by_list(param_dict, filter_list)
+
+    # 给网络加载参数
+    load_param_into_net(net, param_dict)
 
     # ——————————————
     # 冻结除最后一层外的所有参数
@@ -206,14 +206,14 @@ if __name__ == '__main__':
     #         param.requires_grad = False
     # ——————————————
 
-    lr = 0.0005
+    lr = 0.0001
     # 定义优化器和损失函数
-    opt = nn.Momentum(params=net.trainable_params(), learning_rate=0.1, momentum=0.9)
+    # opt = nn.Momentum(params=net.trainable_params(), learning_rate=0.001, momentum=0.9)
     # opt = nn.Adam(params=net.trainable_params(), learning_rate=lr)
-    # opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
+    opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
     # loss = CrossEntropySmooth(sparse=True, reduction='mean',
-    #                           smooth_factor=0.1,
+    #                           smooth_factor=0.2,
     #                           num_classes=4)
 
     # 实例化模型
