@@ -14,20 +14,20 @@ if __name__ == '__main__':
 
     class_name = {0: "glioma", 1: "meningioma", 2: "no", 3: 'pituitary'}
     net = resnet50(class_num=4)
-    lr = 0.0001
+
     # 定义优化器和损失函数
-    opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
+    opt = nn.Adagrad(params=net.trainable_params(), learning_rate=0.0001, weight_decay=0.05)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
 
     # 实例化模型
     model = Model(net, loss, opt, metrics={"Accuracy": nn.Accuracy()})
 
     # 测试模型用
-    net_test(net, 'Luna.ckpt', model, val_ds)
+    net_test(net, 'Baseline.ckpt', model, val_ds)
     if batch_size == 32:
         pred_visualize = True
     visualize_model(net,
-                    'Luna.ckpt',
+                    'Baseline.ckpt',
                     class_name,
                     val_ds,
                     pred_visualize=pred_visualize)
