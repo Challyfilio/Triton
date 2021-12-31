@@ -39,10 +39,6 @@ def create_dataset(data_path, training=True):
             CV.RandomColorAdjust(contrast=0.5),
             CV.Normalize(mean=mean, std=std),
             CV.HWC2CHW()
-            # CV.Decode(),
-            # CV.Resize(size=[224, 224]),
-            # CV.Rescale(1.0 / 255.0, 0.0),
-            # CV.HWC2CHW()
         ]
     else:
         trans = [
