@@ -164,8 +164,8 @@ if __name__ == '__main__':
     # GPU
     context.set_context(mode=context.GRAPH_MODE, device_target="GPU")
 
-    train_data_path = 'data/Tumor/Training'
-    val_data_path = 'data/Tumor/Testing'
+    train_data_path = 'data7/Tumor/Training'
+    val_data_path = 'data7/Tumor/Testing'
 
     train_ds = create_dataset(train_data_path, training=True)
     val_ds = create_dataset(val_data_path, training=False)
@@ -201,7 +201,7 @@ if __name__ == '__main__':
     #         param.requires_grad = False
     # ——————————————
 
-    lr = 0.0001
+    lr = 0.0005
     # 定义优化器和损失函数
     # opt = nn.Momentum(params=net.trainable_params(), learning_rate=0.001, momentum=0.9)
     # opt = nn.Adam(params=net.trainable_params(), learning_rate=lr)
