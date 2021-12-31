@@ -116,7 +116,7 @@ def curve_draw(record):
     plt.xlabel('Epoch')
     plt.legend()
     plt.show()
-    plt.savefig('./acc.png')
+    # plt.savefig('./acc.png')
 
 
 # 验证方法
@@ -186,17 +186,17 @@ if __name__ == '__main__':
 
     # 加载预训练模型
     # pretrained = 'Luna.ckpt'
-    pretrained = 'Triton.ckpt'
-    param_dict = load_checkpoint(pretrained)
-
-    # 获取全连接层的名字
-    filter_list = [x.name for x in net.end_point.get_parameters()]
-
-    # 删除预训练模型的全连接层
-    filter_checkpoint_parameter_by_list(param_dict, filter_list)
-
-    # 给网络加载参数
-    load_param_into_net(net, param_dict)
+    # pretrained = 'Triton.ckpt'
+    # param_dict = load_checkpoint(pretrained)
+    #
+    # # 获取全连接层的名字
+    # filter_list = [x.name for x in net.end_point.get_parameters()]
+    #
+    # # 删除预训练模型的全连接层
+    # filter_checkpoint_parameter_by_list(param_dict, filter_list)
+    #
+    # # 给网络加载参数
+    # load_param_into_net(net, param_dict)
 
     # ——————————————
     # 冻结除最后一层外的所有参数
@@ -205,11 +205,12 @@ if __name__ == '__main__':
     #         param.requires_grad = False
     # ——————————————
 
-    lr = 0.0005
+    # lr = 0.0005
+    lr = 0.1
     # 定义优化器和损失函数
-    # opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
+    opt = nn.Momentum(params=net.trainable_params(), learning_rate=lr, momentum=0.9)
     # opt = nn.Adam(params=net.trainable_params(), learning_rate=lr)
-    opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
+    # opt = nn.Adagrad(params=net.trainable_params(), learning_rate=lr, weight_decay=0.05)
     loss = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')  # 交叉熵
     # loss = CrossEntropySmooth(sparse=True, reduction='mean',
     #                           smooth_factor=0.1,
