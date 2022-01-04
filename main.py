@@ -5,6 +5,7 @@ Challyfilio
 from mindspore_solution import *
 
 if __name__ == '__main__':
+    testmodel = 'Luna.ckpt'
     val_data_path = 'data/Tumor/Testing'
     batch_size = 394
     pred_visualize = False
@@ -23,11 +24,11 @@ if __name__ == '__main__':
     model = Model(net, loss, opt, metrics={"Accuracy": nn.Accuracy()})
 
     # 测试模型用
-    net_test(net, 'Baseline.ckpt', model, val_ds)
+    net_test(net, testmodel, model, val_ds)
     if batch_size == 32:
         pred_visualize = True
     visualize_model(net,
-                    'Baseline.ckpt',
+                    testmodel,
                     class_name,
                     val_ds,
                     pred_visualize=pred_visualize)
