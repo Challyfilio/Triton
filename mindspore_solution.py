@@ -43,6 +43,7 @@ def create_dataset(data_path, training=True):
     else:
         trans = [
             CV.Decode(),
+            # CV.Resize(size=[224, 224]),
             CV.Resize(size=[256, 256]),
             CV.CenterCrop(image_size),
             CV.Normalize(mean=mean, std=std),
