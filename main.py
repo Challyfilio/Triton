@@ -5,7 +5,7 @@ Challyfilio
 from mindspore_solution import *
 
 if __name__ == '__main__':
-    testmodel = 'Luna.ckpt'
+    testmodel = 'Mars.ckpt'
     val_data_path = 'data/Tumor/Testing'
     batch_size = 394
     pred_visualize = False
