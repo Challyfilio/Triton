@@ -1,4 +1,5 @@
 目录结构及文件说明：
+
 ```
 ./
 ├─resnet50.ckpt	            # 预训练模型 ImageNet2012
@@ -22,6 +23,9 @@
 ├─main.py                   # 验证模型用(可视化)
 └─image_operate.ipynb       # 图像增广用(OpenCV)
 ```
+相关文件下载：
+- [数据集、预训练模型](https://pan.baidu.com/s/10ej677Z8Se3kGUdEQpc7Xw) 提取码：3721
+
 扩充数据集图片来源：
 - [BrainWeb: Simulated Brain Database](https://brainweb.bic.mni.mcgill.ca/)
 - [Kaggle脑肿瘤数据集](https://pan.baidu.com/s/12RTIv-RqEZwYCm27Im2Djw%C2%A0) 提取码：tave
