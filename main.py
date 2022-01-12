@@ -5,7 +5,7 @@ Challyfilio
 from mindspore_solution import *
 
 if __name__ == '__main__':
-    testmodel = 'Mars.ckpt'
+    testmodel = 'BestModel.ckpt'  # 这里写验证的模型
     val_data_path = 'data/Tumor/Testing'
     batch_size = 394
     pred_visualize = False
