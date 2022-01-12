@@ -1,11 +1,9 @@
-没有数据集(自行准备)
-
 目录结构及文件说明：
-
 ```
 ./
-├─resnet50.ckpt 稍后上传
-├─modelz
+├─resnet50.ckpt	            # 预训练模型 ImageNet2012
+├─BestModel.ckpt            # 最终结果
+├─modelz                    # resnet模型文件夹
 ├─data
 │  └─Tumor
 │     ├─Training
@@ -18,7 +16,7 @@
 │         ├─meningioma_tumor
 │         ├─no_tumor
 │         └─pituitary_tumor
-├─pytorch_solution.py       # pytorch框架 不完善
+├─pytorch_solution.py       # pytorch框架_不完善
 ├─mindspore_solution.py     # mindspore框架
 ├─callback.py               # mindspore_solution的回调类
 ├─main.py                   # 验证模型用(可视化)
@@ -26,4 +24,4 @@
 ```
 扩充数据集图片来源：
 - [BrainWeb: Simulated Brain Database](https://brainweb.bic.mni.mcgill.ca/)
-- [Kaggle脑肿瘤数据集](https://pan.baidu.com/s/12RTIv-RqEZwYCm27Im2Djw%C2%A0) tave
+- [Kaggle脑肿瘤数据集](https://pan.baidu.com/s/12RTIv-RqEZwYCm27Im2Djw%C2%A0) 提取码：tave
