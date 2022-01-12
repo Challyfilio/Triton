@@ -165,8 +165,8 @@ if __name__ == '__main__':
     # GPU
     context.set_context(mode=context.GRAPH_MODE, device_target="GPU")
 
-    train_data_path = 'data7/Tumor/Training'
-    val_data_path = 'data7/Tumor/Testing'
+    train_data_path = 'data/Tumor/Training'
+    val_data_path = 'data/Tumor/Testing'
 
     train_ds = create_dataset(train_data_path, training=True)
     val_ds = create_dataset(val_data_path, training=False)
@@ -182,8 +182,7 @@ if __name__ == '__main__':
     # image_show(val_ds, class_name)
 
     # 加载预训练模型
-    # pretrained = 'Luna.ckpt'
-    pretrained = 'Triton.ckpt'
+    pretrained = 'resnet50.ckpt'
     param_dict = load_checkpoint(pretrained)
 
     # 获取全连接层的名字
